@@ -1,19 +1,22 @@
 package com.fxpro.task;
 
 
+import java.util.Arrays;
+
 public class App {
 
     private static final int LANDSCAPE_LIMIT = 32000;
 
     public static void main(String[] args) {
-        if (args.length == 0) {
-            //TODO: runMock
-        }
-
-        int[] input = {5, 2, 3, 4, 5, 4, 0, 3, 1};
-
         App app = new App();
-        System.out.println("Water amount: " + app.calculateWaterAmount(input));
+
+        if (args.length == 0) {
+            System.out.println("Running with mock inputs...");
+            app.runMock();
+        } else {
+            int[] landscape = Arrays.stream(args).mapToInt(Integer::parseInt).toArray();
+            System.out.println("Water amount: " + app.calculateWaterAmount(landscape));
+        }
     }
 
     /**
@@ -32,6 +35,7 @@ public class App {
         validateHeightLimit(landscape[landscape.length - 1]);
 
         long waterAmount = 0L;
+
 
         for (int i = 1; i < landscape.length - 1; i++) {
 
@@ -73,9 +77,14 @@ public class App {
     void runMock() {
         int[][] inputs = {
                 {5, 2, 3, 4, 5, 4, 0, 3, 1},
-                {5, 2, 3, 4, 5, 4, 0, 3, 1},
-                {5, 2, 3, 4, 5, 4, 0, 3, 1}
+                {8, 5, 4, 5, 1, 1, 6, 1, 5, 1, 4},
+                {8, 1, 4, 1, 4, 1, 5, 3, 1}
         };
+
+        for (int[] input : inputs) {
+            long result = calculateWaterAmount(input);
+            System.out.println(String.format("Water amount for input %s --> %d", Arrays.toString(input), result));
+        }
 
 
     }
