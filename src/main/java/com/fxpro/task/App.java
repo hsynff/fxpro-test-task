@@ -64,6 +64,8 @@ public class App {
         if (height > LANDSCAPE_LIMIT) {
             throw new RuntimeException(
                     String.format("Landscape height limit exceeds. Max: %d, Actual: %d", LANDSCAPE_LIMIT, height));
+        } else if (height < 0) {
+            throw new RuntimeException("Landscape height is negative: " + height);
         }
     }
 
