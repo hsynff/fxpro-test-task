@@ -43,12 +43,12 @@ public class App {
 
             int leftMax = 0;
             for (int j = 0; j < i; j++) {
-                leftMax = landscape[j] > leftMax ? landscape[j] : leftMax;
+                leftMax = Math.max(leftMax, landscape[j]);
             }
 
             int rightMax = 0;
             for (int j = i + 1; j < landscape.length; j++) {
-                rightMax = landscape[j] > rightMax ? landscape[j] : rightMax;
+                rightMax = Math.max(rightMax, landscape[j]);
             }
 
             int currentWater = Math.min(leftMax, rightMax) - landscape[i];
