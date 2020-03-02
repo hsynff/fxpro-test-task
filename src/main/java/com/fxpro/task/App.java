@@ -76,7 +76,7 @@ public class App {
         }
     }
 
-    void runMock() {
+    private void runMock() {
         int[][] inputs = {
                 {5, 2, 3, 4, 5, 4, 0, 3, 1},
                 {8, 5, 4, 5, 1, 1, 6, 1, 5, 1, 4},
