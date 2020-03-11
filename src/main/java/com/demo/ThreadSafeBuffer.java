@@ -1,7 +1,5 @@
 package com.demo;
 
-import java.util.Arrays;
-
 /*
 / 1. FIFO
 // 2. Ring buffer, use all space in buffer
@@ -53,6 +51,7 @@ public class ThreadSafeBuffer {
     private final Object[] data;
     private int size;
     private int readIndex;
+    private int writeIndex;
 
     public ThreadSafeBuffer(int MAX_BUF_SIZE) {
         this.MAX_BUF_SIZE = MAX_BUF_SIZE;
@@ -60,19 +59,50 @@ public class ThreadSafeBuffer {
     }
 
 
-    public void put(Object o) {
-        if (size == MAX_BUF_SIZE) {
-            throw new IllegalStateException("Buffer is full");
+    public synchronized void put(Object o) {
+        System.out.println("Put: " + o);
+
+        while (size == MAX_BUF_SIZE) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        data[size] = o;
+
+        if (size == 0) {
+            notifyAll();
+        }
+
+        if (writeIndex == MAX_BUF_SIZE) {
+            // make cycle
+            writeIndex = 0;
+        }
+
+        data[writeIndex] = o;
+        writeIndex++;
         size++;
     }
 
 
     // _,2,3,4
-    public Object get() {
-        if (size == 0) {
-            throw new IllegalStateException("Empty buffer");
+    public synchronized Object get() {
+        System.out.println("Get from size: " + size);
+        while (size == 0) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (size == MAX_BUF_SIZE) {
+            notifyAll();
+        }
+
+        if (readIndex == MAX_BUF_SIZE) {
+            //make cycle
+            readIndex = 0;
         }
 
         Object dataToReturn = data[readIndex];
